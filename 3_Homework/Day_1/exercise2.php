@@ -1,0 +1,4 @@
+<?php
+$createTableImagesQuery = '';
+
+$createTableUsersCompaniesQuery = '';
