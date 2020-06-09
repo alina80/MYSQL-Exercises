@@ -1,24 +1,24 @@
 <?php
 //below, write queries that add records to the first table
-$table1row1 = '';
-$table1row2 = '';
-$table1row3 = '';
-$table1row4 = '';
-$table1row5 = '';
+$table1row1 = "INSERT INTO `products` (`id`, `name`, `description`, `price`) VALUES (NULL, 'Laptop', 'laptop lenovo', '300.5');";
+$table1row2 = "INSERT INTO `products` (`id`, `name`, `description`, `price`) VALUES (NULL, 'Mouse', 'mouse', '1.5');";
+$table1row3 = "INSERT INTO `products` (`id`, `name`, `description`, `price`) VALUES (NULL, 'Monitor', 'monitor lg', '150.4');";
+$table1row4 = "INSERT INTO `products` (`id`, `name`, `description`, `price`) VALUES (NULL, 'Tableta', 'tableta samsung', '350.5');";
+$table1row5 = "INSERT INTO `products` (`id`, `name`, `description`, `price`) VALUES (NULL, 'Mobil', 'mobil xiaomi', '400.5');";
 
 //below, write queries that add records to the second table
-$table2row1 = '';
-$table2row2 = '';
-$table2row3 = '';
-$table2row4 = '';
-$table2row5 = '';
+$table2row1 = "INSERT INTO `orders` (`id`, `description`) VALUES (NULL, 'order 1');";
+$table2row2 = "INSERT INTO `orders` (`id`, `description`) VALUES (NULL, 'order 2');";
+$table2row3 = "INSERT INTO `orders` (`id`, `description`) VALUES (NULL, 'order 3');";
+$table2row4 = "INSERT INTO `orders` (`id`, `description`) VALUES (NULL, 'order 4');";
+$table2row5 = "INSERT INTO `orders` (`id`, `description`) VALUES (NULL, 'order 5');";
 
 //below, write queries that add records to the third table
-$table3row1 = '';
-$table3row2 = '';
-$table3row3 = '';
-$table3row4 = '';
-$table3row5 = '';
+$table3row1 = "INSERT INTO `clients` (`id`, `name`, `surname`) VALUES (NULL, 'Client', 'Unu');";
+$table3row2 = "INSERT INTO `clients` (`id`, `name`, `surname`) VALUES (NULL, 'Client', 'Doi');";
+$table3row3 = "INSERT INTO `clients` (`id`, `name`, `surname`) VALUES (NULL, 'Client', 'Trei');";
+$table3row4 = "INSERT INTO `clients` (`id`, `name`, `surname`) VALUES (NULL, 'Client', 'Patru');";
+$table3row5 = "INSERT INTO `clients` (`id`, `name`, `surname`) VALUES (NULL, 'Client', 'Cinci');";
 
 //below, place code that will add the file that handles the form and saves data in the database
 ?>
@@ -40,7 +40,7 @@ $table3row5 = '';
 
         </div>
         <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">
-            <form action="zadanie1_form.php" method="post" role="form">
+            <form action="./exercise1_form.php" method="post" role="form">
                 <legend>Add product</legend>
                 <div class="form-group">
                     <label for="">Name</label>
