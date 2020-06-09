@@ -1,4 +1,22 @@
 <?php
+require_once '../../Day_1/2_Adding_data/conn.php';
+$conn = connect('cinemas');
+
+$errors = '';
+if ($_SERVER['REQUEST_METHOD'] === 'GET'){
+    $table = isset($_GET['table']) && in_array($_GET['table'],['Movies', 'Cinemas', 'Payments','Tickets']) ?
+        $_GET['table'] : null;
+    if (!is_null($table)){
+        if (!in_array($_GET['table'],['Movies', 'Cinemas', 'Payments','Tickets'])){
+            $errors = "Table does not exist";
+            echo $errors;
+        }
+        $sql2 = "SHOW COLUMNS FROM `$table`";
+        $stmt2 = $conn->prepare($sql2);
+        $stmt2->execute();
+        $result2 = $stmt2->fetchAll(PDO::FETCH_ASSOC);
+    }
+}
 ?>
 <!doctype html>
 <html lang="en">
@@ -18,22 +36,45 @@
 
         </div>
         <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">
-            <form action="exercise4_form.php" method="post" role="form">
+            <form action="exercise4.php" method="get">
+                <legend>Select Table</legend>
+                <div class="group-item">
+                    <label>
+                        <input type="radio" name="table" value="Movies"> Movies
+                    </label>
+                    <label>
+                        <input type="radio" name="table" value="Cinemas"> Cinemas
+                    </label>
+                    <label>
+                        <input type="radio" name="table" value="Payments"> Payments
+                    </label>
+                    <label>
+                        <input type="radio" name="table" value="Tickets"> Tickets
+                    </label>
+                </div>
+                <div class="group-item">
+                    <button type="submit" class="btn btn-primary">Select</button>
+                </div>
+            </form>
+            <form action="exercise4_form.php?table=<?= $table ?>" method="post" role="form">
                 <div class="form-group">
-                    <legend>Remove row</legend>
+
+                    <legend>Remove Column from <?= $table ?></legend>
                     <div class="form-group">
                         <label for="">Table column</label>
                         <select name="tableColumn" id="tableColumn" class="form-control">
                             <option value=""> -- Select column --</option>
-                            <option value="id">Movies.id</option>
-                            <option value="name">Movies.name</option>
-                            <option value="description">Movies.description</option>
-                            <option value="rating">Movies.rating</option>
+                            <?php
+                            foreach ($result2 as $k=>$v){ ?>
+                                <option value="<?= $v['Field'] ?>"><?= $v['Field'] ?></option>
+                            <?php }
+                            ?>
                         </select>
                     </div>
-                    <button type="submit" value="remove" class="btn btn-danger">REMOVE</button>
+                    <button type="submit" value="remove" name="operation" class="btn btn-danger">REMOVE</button>
                 </div>
 
+                <legend>Add Column to <?= $table ?></legend>
                 <div class="form-group">
                     <div class="form-group">
                         <label for="">Column name</label>
@@ -45,7 +86,7 @@
                         <input type="text" class="form-control" name="columnType" id="columnType"
                                placeholder="Column type ex. varchar(30)...">
                     </div>
-                    <button type="submit" value="add" class="btn btn-success">ADD</button>
+                    <button type="submit" value="add" name="operation" class="btn btn-success">ADD</button>
                 </div>
             </form>
         </div>

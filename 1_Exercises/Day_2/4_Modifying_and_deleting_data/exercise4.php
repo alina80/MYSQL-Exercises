@@ -24,10 +24,10 @@
                     <label for="">Table</label>
                     <select name="tableName" id="tableName" class="form-control">
                     	<option value=""> -- Select table -- </option>
-                    	<option value="cinemas">Cinemas</option>
-                    	<option value="movies">Movies</option>
-                    	<option value="tickets">Tickets</option>
-                    	<option value="payments">Payments</option>
+                    	<option value="Cinemas">Cinemas</option>
+                    	<option value="Movies">Movies</option>
+                    	<option value="Tickets">Tickets</option>
+                    	<option value="Payments">Payments</option>
                     </select>
                 </div>
 

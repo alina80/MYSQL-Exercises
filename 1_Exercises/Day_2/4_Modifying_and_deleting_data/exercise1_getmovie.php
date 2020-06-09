@@ -1,14 +1,72 @@
 <?php
 //below, write code that downloads the data of a single film after you submit a GET request
-
+require_once '../../Day_1/2_Adding_data/conn.php';
+$conn = connect('cinemas');
 //save appropriate data from the database in the following variables, the form will be filled with them automatically
 $id = '';
 $name = '';
 $description = '';
 $rating = '';
+$message = '';
+$hasErrors = false;
 
-//below, write code for handling the form
+if ($_SERVER['REQUEST_METHOD'] === 'POST'){
+    $id = isset($_POST['movieId']) && is_numeric($_POST['movieId']) ?
+        $_POST['movieId'] : null;
+    $name = isset($_POST['movieName']) && strlen(trim($_POST['movieName'])) > 3 ?
+        $_POST['movieName'] : null;
+    $description = isset($_POST['movieDescription']) && strlen(trim($_POST['movieDescription'])) > 3 ?
+        $_POST['movieDescription'] : null;
+    $rating = isset($_POST['movieRating']) && is_numeric($_POST['movieRating']) ?
+        $_POST['movieRating'] : null;
 
+    $errors = [];
+    if (is_null($id)){
+        $errors[] = 'Id';
+    }
+    if (is_null($name)){
+        $errors[] = 'Name';
+    }
+    if (is_null($description)){
+        $errors[] = 'Description';
+    }
+    if (is_null($rating)){
+        $errors[] = 'Rating';
+    }
+
+    if(empty($errors)){
+        $sql = "UPDATE `Movies` SET `name`=:name, `description`=:description, `rating`=:rating WHERE `id`=:id";
+        $stmt = $conn->prepare($sql);
+        $result = $stmt->execute([
+            'id'=>$id,
+            'name'=>$name,
+            'description'=>$description,
+            'rating'=>$rating
+        ]);
+        if ($result){
+            $message = 'Success';
+        }else{
+            $message = 'Fail';
+            $hasErrors = true;
+        }
+
+    }else{
+        $message = 'ERRORS ON FIELDS: ' . implode(',', $errors);
+        $hasErrors = true;
+    }
+}elseif ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['id']) && is_numeric($_GET['id'])){
+    $id = $_GET['id'];
+
+    $sql = "SELECT * FROM `Movies` WHERE `id`=:id";
+    $stmt = $conn->prepare($sql);
+    $stmt->execute(['id'=>$id]);
+    $movie = $stmt->fetch(PDO::FETCH_ASSOC);
+
+    foreach ($movie as $k=>$v){
+        $$k = $v;
+    }
+}
+print_r($data);
 ?>
 <!doctype html>
 <html lang="en">
@@ -25,10 +83,10 @@ $rating = '';
 <div class="container">
     <div class="row">
         <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">
-
+            <span class="text-<?= $hasErrors ? 'danger' : 'success' ?>"><?= $message ?></span>
         </div>
         <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">
-            <form action="" method="post" role="form">
+            <form action="./exercise1_getmovie.php" method="post" role="form">
                 <legend>Editing a film</legend>
                 <div class="form-group">
                     <label for="">Film id</label>
