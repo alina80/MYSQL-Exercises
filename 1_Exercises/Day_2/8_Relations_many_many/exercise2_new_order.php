@@ -10,12 +10,36 @@ try {
 }catch (PDOException $e){
     $message = "Error: " . $e->getMessage();
 }
-print_r($_POST);
+
 if ($_SERVER['REQUEST_METHOD'] === 'POST'){
     $orderDescription = isset($_POST['orderDescription']) && strlen(trim($_POST['orderDescription'])) > 3 ?
          $_POST['orderDescription'] : null;
+    $orderList = isset($_POST['products']) && !empty($_POST['products']) ?
+        $_POST['products'] : null;
+    try {
+        $sql1 = "INSERT INTO `orders` (`description`) VALUES (:description)";
+        $stmt1 = $conn->prepare($sql1);
+        $stmt1->execute(['description'=>$orderDescription]);
+        $orderId = $conn->lastInsertId();
+        foreach ($orderList as $k=>$v){
+            $sql2 = "INSERT INTO `products_orders` (`product_id`,`order_id`) VALUES (:product_id,:order_id)";
 
+            try {
+                $stmt2 = $conn->prepare($sql2);
+                $stmt2->execute([
+                        'product_id'=>$v,
+                        'order_id'=>$orderId
+                ]);
+                $message = 'Order with id = ' . $orderId . ' was inserted';
 
+            }catch (PDOException $e){
+                $message = "Error: " . $e->getMessage();
+            }
+        }
+    }catch (PDOException $e){
+        $message = "Error: " . $e->getMessage();
+    }
+    echo $message;
 }
 ?>
 <!doctype html>
