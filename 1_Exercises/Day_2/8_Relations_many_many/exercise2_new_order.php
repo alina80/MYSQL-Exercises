@@ -1,4 +1,9 @@
 <?php
+require_once '../../Day_1/2_Adding_data/conn.php';
+$conn = connect('products');
+if ($_SERVER['REQUEST_METHOD'] === 'POST'){
+
+}
 ?>
 <!doctype html>
 <html lang="en">
@@ -18,7 +23,7 @@
 
         </div>
         <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">
-            <form action="" method="post" role="form">
+            <form action="./exercise2_new_order.php" method="post" role="form">
                 <div class="form-group">
                     <label for="">Order description:</label>
                     <input type="text" class="form-control" name="orderDescription" id="orderDescription"

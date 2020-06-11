@@ -1,4 +1,16 @@
 <?php
+require_once '../../Day_1/2_Adding_data/conn.php';
+$conn = connect('products');
+$sql = "SELECT * FROM `Categories` ORDER BY `name` ASC ";
+try {
+    $stmt = $conn->prepare($sql);
+    $stmt->execute();
+    $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+}catch (PDOException $e){
+    echo "Error: " . $e->getMessage();
+}
+
+
 ?>
 <!doctype html>
 <html lang="en">
@@ -27,11 +39,11 @@
                 <div class="form-group">
                     <label for="">Main category</label>
                     <select name="mainCategory" id="mainCategory" class="form-control">
-                        <option value=""> -- Select main cat --</option>
+                        <option value=""> -- Select main category --</option>
                         <?php
-                        //dopisz tutaj kod generujący kolejne elementy option z głównymi kategoriami z bazy
-                        //atrybut value ma mieć wartość id głównej kategorii
-                        //wyświetlana na stronie w polu option ma być nazwa głównej kategorii
+                          foreach ($result as $k=>$v){ ?>
+                              <option value="<?= $v['id'] ?>"> <?= $v['name'] ?> </option>
+                          <?php }
                         ?>
                     </select>
                 </div>
