@@ -7,12 +7,12 @@
 
 **IMPORTANT - do not change the file structure or filenames and use the prepared variables**
 
-#### Exercise 1 - done with the lecturer
+#### Exercise 1
 
 1. Create a new database named ```products_ex```.  
 2. Then write a PHP script that will create a connection to this database.
 
-#### Exercise 2 - done with the lecturer
+#### Exercise 2
 
 In the database named ```products_ex```, create the following tables:
 ```SQL
