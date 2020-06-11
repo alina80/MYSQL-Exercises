@@ -1,7 +1,20 @@
 <?php
 require_once '../../Day_1/2_Adding_data/conn.php';
 $conn = connect('products');
+$products = [];
+
+try {
+    $sql = "SELECT * FROM `products`";
+    $stmt = $conn->query($sql);
+    $productList = $stmt->fetchAll(PDO::FETCH_ASSOC);
+}catch (PDOException $e){
+    $message = "Error: " . $e->getMessage();
+}
+print_r($_POST);
 if ($_SERVER['REQUEST_METHOD'] === 'POST'){
+    $orderDescription = isset($_POST['orderDescription']) && strlen(trim($_POST['orderDescription'])) > 3 ?
+         $_POST['orderDescription'] : null;
+
 
 }
 ?>
@@ -31,12 +44,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST'){
                 </div>
                 <div class="checkbox">
                     <?php
-                    /*
-                    Here, generate a list of all products that are in the database. Below you will find sample HTML code that displays a single product:
-                    <label>
-                        <input type="checkbox" name="products[]" value="12"> Product with id 12
-                    </label>
-                    */
+                    foreach ($productList as $k=>$v){ ?>
+                        <label>
+                            <input type="checkbox" name="products[]" value="<?= $v['id'] ?>"> <?= $v['name'] ?>
+                        </label>
+                    <?php }
                     ?>
                 </div>
                 <button type="submit" class="btn btn-success">ADD ORDER</button>
