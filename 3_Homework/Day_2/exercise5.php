@@ -1,4 +1,25 @@
 <?php
+require_once '../../1_Exercises/Day_1/2_Adding_data/conn.php';
+$conn = connect('homeworkDay1');
+
+if ($_SERVER['REQUEST_METHOD'] === 'GET'){
+    $table = isset($_GET['table']) && in_array($_GET['table'],['users','images','offers','users_companies']) ?
+        $_GET['table'] : null;
+    $column = isset($_GET['column']) ?
+        $_GET['column'] : null;
+    $value = isset($_GET['value']) ?
+        $_GET['value'] : null;
+    $show = isset($_GET['show']) && $_GET['show'] === 'name' ?
+        $_GET['show'] : null;
+
+    $sql = "SELECT `$show` FROM `$table`";
+    $stmt = $conn->prepare($sql);
+    $stmt->execute();
+    $users = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+
+}
+
 ?>
 <!doctype html>
 <html lang="en">
@@ -14,24 +35,17 @@
 <body>
 <div class="container">
     <div class="row">
-        <div class="col-xs-3 col-sm-3 col-md-3 col-lg-3">
-
-        </div>
+        <div class="col-xs-3 col-sm-3 col-md-3 col-lg-3"></div>
         <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
-            <ul class="dbList">
+            <ul class="list">
                 <?php
-                //the call exercise6.php?table=users&column=email&value=sonia52@gajewski.pl&show=name
-                //returns a list of values from the `name` column, as shown in the pattern below
-                //<li>John Snow</li>
-                //<li>Mike Mathison</li>
-
-                //generate appropriate li elements below
+                foreach ($users as $k=>$v){ ?>
+                    <li class="list-item"><?= $v['name'] ?></li>
+                <?php }
                 ?>
             </ul>
         </div>
-        <div class="col-xs-3 col-sm-3 col-md-3 col-lg-3">
-
-        </div>
+        <div class="col-xs-3 col-sm-3 col-md-3 col-lg-3"></div>
     </div>
 </div>
 </body>

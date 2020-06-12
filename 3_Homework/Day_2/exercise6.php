@@ -1,4 +1,45 @@
 <?php
+require_once '../../1_Exercises/Day_1/2_Adding_data/conn.php';
+$conn = connect('homeworkDay1');
+$hasErrors = false;
+$errors = [];
+
+$sql = "SELECT * FROM `offers`";
+try {
+    $stmt = $conn->prepare($sql);
+    $stmt->execute();
+    $offers = $stmt->fetchAll(PDO::FETCH_ASSOC);
+}catch (PDOException $e){
+    $errors[] = $e->getMessage();
+}
+
+
+if ($_SERVER['REQUEST_METHOD'] === 'POST'){
+    $expire = isset($_POST['daysToEnd']) && $_POST['daysToEnd'] > 0 && in_array($_POST['daysToEnd'],[1,3,7,30]) ?
+        $_POST['daysToEnd'] : null;
+    if (is_null($expire)){
+        $errors[] = 'Expire days not set';
+    }
+
+    if (empty($errors)){
+        try {
+            $sql = "SELECT `title`,`expire` FROM `offers` WHERE DATEDIFF(`expire`,NOW()) > $expire";
+            $stmt = $conn->prepare($sql);
+            $stmt->execute();
+            $offers = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        }catch (PDOException $e){
+            $errors[] = $e->getMessage();
+        }
+    }
+    if (!empty($errors)){
+        $hasErrors = true;
+        $message = "Errors: " . implode(',',$errors);
+    }else{
+        $message = "Offers that expire in $expire days:";
+    }
+
+
+}
 ?>
 <!doctype html>
 <html lang="en">
@@ -17,17 +58,17 @@
         <div class="col-xs-3 col-sm-3 col-md-3 col-lg-3">
 
         </div>
-        <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
-            <ul class="offerList">
+        <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6 mt-5 text-<?= $hasErrors ? 'danger' : 'success' ?>">
+            <?= $message ?>
+            <ul class="list-group">
                 <?php
-                //<li>Title of offer 1</li>
-                //<li>Title of offer 2</li>
-
-                //below, generate the list of titles of offers that meet the conditions of this exercise
+                foreach ($offers as $k=> $v){ ?>
+                    <li class="list-group-item"><?= $v['title'] ?></li>
+                <?php }
                 ?>
             </ul>
 
-            <form action="" method="post" role="form">
+            <form action="./exercise6.php" method="post" role="form">
                 <legend>Expiring offers</legend>
                 <div class="form-group">
                     <label for=""></label>
